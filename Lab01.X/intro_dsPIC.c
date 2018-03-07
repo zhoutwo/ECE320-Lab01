@@ -121,11 +121,10 @@ void __attribute__((interrupt, auto_psv)) _T1Interrupt(void) {
 
     IFS0bits.T1IF = 0;
 
-    // if GO is 1 we are not done before the next interrupt!
-    /* 
-     if(GO == 1)
-      LATEbits.LATE1 = 1;
-     */
+    // if GO is 1 we are not done before the next interrupt! 
+    if (GO == 1)
+        LATEbits.LATE1 = 1;
+
     GO = 1;
 }
 
@@ -226,8 +225,8 @@ void pwm_init(void) {
     config2 = PWM_MOD1_IND & // pwm modules run independently
             PWM_MOD2_IND &
             PWM_MOD3_IND &
-            PWM_PEN1H & // disable 1 high
-            PWM_PEN2H & // disable 2 high
+            PWM_PDIS1H & // disable 1 high
+            PWM_PDIS2H & // disable 2 high
             PWM_PDIS3H & // enable 3 high
             PWM_PDIS1L & // disable 1 low
             PWM_PDIS2L & // disable 2 low
@@ -298,7 +297,7 @@ int main(void) {
 
     // initialize timer1
     // dt can be no larger than 0.25 seconds
-    dt = 0.1; // the sampling interval in seconds
+    dt = 0.01; // the sampling interval in seconds
 
     // dt = N*256/29,480,000;  assuming a 256 prescaler.
     // so N = dt* 115156
@@ -326,14 +325,13 @@ int main(void) {
     while (1) {
         while (!GO);
         time = time + dt;
-        /*    
-          for(i=1; i<2000; i++)
-          {
-              x = 10.0;
-              y = 20.0;
-              z = x*y;
-          }
-         */
+
+        for (i = 1; i < 2000; i++) {
+            x = 10.0;
+            y = 20.0;
+            z = x*y;
+        }
+
         // LEDs turn on simultaneously
         /*if (on == 0) {
             LATEbits.LATE1 = 1;
