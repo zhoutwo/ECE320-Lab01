@@ -226,8 +226,8 @@ void pwm_init(void) {
     config2 = PWM_MOD1_IND & // pwm modules run independently
             PWM_MOD2_IND &
             PWM_MOD3_IND &
-            PWM_PDIS1H & // disable 1 high
-            PWM_PDIS2H & // disable 2 high
+            PWM_PEN1H & // disable 1 high
+            PWM_PEN2H & // disable 2 high
             PWM_PDIS3H & // enable 3 high
             PWM_PDIS1L & // disable 1 low
             PWM_PDIS2L & // disable 2 low
@@ -346,7 +346,7 @@ int main(void) {
         }*/
 
         // LEDs turn on alternatively
-        if (on == 0) {
+        /*if (on == 0) {
             LATEbits.LATE1 = 1;
             LATEbits.LATE3 = 0;
             on = 1;
@@ -354,16 +354,15 @@ int main(void) {
             LATEbits.LATE1 = 0;
             LATEbits.LATE3 = 1;
             on = 0;
-        }
+        }*/
 
-        /*
-         dutycycle = (unsigned int) ((double) AD_value)*scale;
-         dutycyclereg = 1;
-         SetDCMCPWM( dutycyclereg, dutycycle, updatedisable);
-         dutycycle = (unsigned int) ((double)(1023- AD_value))*scale;
-         dutycyclereg = 2;
-         SetDCMCPWM( dutycyclereg, dutycycle, updatedisable); 
-         */
+        dutycycle = (unsigned int) ((double) AD_value) * scale;
+        dutycyclereg = 1;
+        SetDCMCPWM(dutycyclereg, dutycycle, updatedisable);
+        dutycycle = (unsigned int) ((double) (1023 - AD_value)) * scale;
+        dutycyclereg = 2;
+        SetDCMCPWM(dutycyclereg, dutycycle, updatedisable);
+
         if (--count == 0) {
             int_time = (int) (100.0 * time); // convert for printout
             printf("%8d %u \n", int_time, AD_value);
