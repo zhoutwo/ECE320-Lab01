@@ -334,8 +334,8 @@ int main(void) {
               z = x*y;
           }
          */
-
-        if (on == 0) {
+        // LEDs turn on simultaneously
+        /*if (on == 0) {
             LATEbits.LATE1 = 1;
             LATEbits.LATE3 = 1;
             on = 1;
@@ -343,7 +343,19 @@ int main(void) {
             LATEbits.LATE1 = 0;
             LATEbits.LATE3 = 0;
             on = 0;
+        }*/
+
+        // LEDs turn on alternatively
+        if (on == 0) {
+            LATEbits.LATE1 = 1;
+            LATEbits.LATE3 = 0;
+            on = 1;
+        } else {
+            LATEbits.LATE1 = 0;
+            LATEbits.LATE3 = 1;
+            on = 0;
         }
+
         /*
          dutycycle = (unsigned int) ((double) AD_value)*scale;
          dutycyclereg = 1;
